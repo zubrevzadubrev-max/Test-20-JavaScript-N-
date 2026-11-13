@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JavaScript — проверь себя</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f8f6f1;
+    --paper: #ffffff;
+    --text: #263b39;
+    --muted: #617572;
+    --green: #216b5d;
+    --mint: #e6f3ec;
+    --pink: #f9e3df;
+    --line: #dce4dd;
+    --red: #a63042;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at 5% 15%, #e1eee6 0, transparent 35%),
+      radial-gradient(circle at 95% 70%, #f7e1dc 0, transparent 35%),
+      var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", Arial, sans-serif;
+    min-height: 100vh;
+  }
+
+  button { font: inherit; touch-action: manipulation; }
+  button:not(:disabled) { cursor: pointer; }
+  button:focus-visible, summary:focus-visible {
+    outline: 3px solid #c45c45;
+    outline-offset: 5px;
+  }
+  [hidden] { display: none !important; }
+
+  .container {
+    width: min(920px, calc(100% - 32px));
+    margin: auto;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 28px 0;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 19px;
+    font-weight: 800;
+  }
+
+  .logo {
+    display: grid;
+    place-items: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--green);
+    color: white;
+    font-weight: 800;
+    transform: rotate(-8deg);
+  }
+
+  .badge {
+    border: 1px solid var(--line);
+    background: #ffffffa8;
+    border-radius: 30px;
+    padding: 10px 15px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  main { padding: 20px 0 40px; }
+
+  .sheet {
+    padding: clamp(24px, 5vw, 48px);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    box-shadow: 0 18px 60px #3046380a;
+  }
+
+  .label {
+    display: inline-block;
+    background: var(--mint);
+    color: var(--green);
+    padding: 9px 14px;
+    border-radius: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 800;
+    font-size: 11px;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 170px;
+    gap: 25px;
+    align-items: center;
+  }
+
+  h1 {
+    font-family: Georgia, serif;
+    font-size: clamp(40px, 7vw, 65px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -2px;
+    margin: 24px 0;
+  }
+
+  h1 em { color: var(--green); }
+
+  .description {
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.8;
+    max-width: 540px;
+  }
+
+  .sticker {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: 2px dashed #cb9689;
+    border-radius: 35px;
+    background: var(--pink);
+    transform: rotate(8deg);
+  }
+
+  .sticker strong {
+    font-family: Georgia, serif;
+    font-size: 65px;
+    font-weight: 500;
+  }
+
+  .sticker span { font-size: 13px; }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 30px 0;
+  }
+
+  .metric {
+    padding: 20px 14px;
+    background: #f7f9f6;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+  }
+
+  .metric strong {
+    display: block;
+    font-size: 25px;
+    margin-bottom: 6px;
+    color: var(--green);
+  }
+
+  .metric span { font-size: 13px; color: var(--muted); }
+
+  .primary {
+    background: var(--green);
+    color: white;
+    border: 0;
+    border-radius: 14px;
+    padding: 16px 25px;
+    min-height: 52px;
+    font-weight: 750;
+    transition: background .15s, transform .15s;
+  }
+
+  .primary:hover:not(:disabled) {
+    background: #174f44;
+    transform: translateY(-2px);
+  }
+
+  .primary:disabled { opacity: .45; cursor: default; }
+
+  .note { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+  .topline, .question-meta, .bottomline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .topline { font-size: 14px; }
+  .points { font-weight: 800; color: var(--green); }
+
+  .progress {
+    height: 7px;
+    border-radius: 20px;
+    background: #edf1eb;
+    overflow: hidden;
+    margin: 18px 0 30px;
+  }
+
+  .progress div {
+    width: 0;
+    height: 100%;
+    background: var(--green);
+    border-radius: inherit;
+    transition: width .3s;
+  }
+
+  .topic {
+    font-size: 12px;
+    background: var(--pink);
+    padding: 8px 12px;
+    border-radius: 9px;
+  }
+
+  .question-meta .note { margin: 0; }
+
+  h2 {
+    margin: 24px 0;
+    font-size: clamp(23px, 4vw, 30px);
+    line-height: 1.45;
+    letter-spacing: -.6px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .answers { display: grid; gap: 12px; }
+
+  .answer {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    background: white;
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 15px;
+    min-height: 64px;
+    transition: background .15s, border-color .15s;
+  }
+
+  .answer:hover:not(:disabled) {
+    background: #f2f8f3;
+    border-color: var(--green);
+  }
+
+  .letter {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #f0f3ee;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .answer-text {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .answer.correct { background: #e9f5ed; border-color: #418569; }
+  .answer.wrong { background: #fff0f1; border-color: #c65c6c; }
+
+  .feedback {
+    margin-top: 22px;
+    padding: 18px;
+    background: #f7f9f6;
+    border-radius: 16px;
+    line-height: 1.7;
+  }
+
+  .feedback p { margin: 7px 0 0; color: var(--muted); }
+  .bottomline { margin-top: 24px; flex-wrap: wrap; }
+
+  .result-head { text-align: center; }
+  .result-head h2 { font-family: Georgia, serif; font-size: 38px; }
+  .result-head .description { margin: auto; }
+
+  .result-number {
+    font-family: Georgia, serif;
+    color: var(--green);
+    font-size: clamp(65px, 15vw, 100px);
+    margin-top: 20px;
+  }
+
+  .result-actions { text-align: center; }
+
+  details {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid var(--line);
+  }
+
+  summary { cursor: pointer; font-weight: 750; }
+
+  .review-item {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+  }
+
+  .review-item strong { white-space: pre-wrap; }
+  .review-item p { margin: 7px 0 0; color: var(--muted); }
+  .review-item .right { color: var(--green); }
+  .review-item .wrong-text { color: var(--red); }
+
+  footer {
+    padding: 0 0 30px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+
+  footer strong { color: var(--text); }
+
+  @media (max-width: 600px) {
+    header { padding: 20px 0; }
+    .brand { font-size: 16px; gap: 8px; }
+    .badge { padding: 9px 11px; font-size: 12px; }
+    main { padding-top: 10px; }
+    .hero { grid-template-columns: 1fr; }
+    .sticker { display: none; }
+    .metrics { gap: 8px; }
+    .metric { padding: 16px 10px; }
+    .metric strong { font-size: 22px; }
+    .metric span { font-size: 11px; }
+    .bottomline .primary { width: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="brand">
+      <span class="logo" aria-hidden="true">JS</span>
+      JavaScript Notes
+    </div>
+    <div class="badge">Рекорд: <strong id="best">0</strong> / 200</div>
+  </header>
+
+  <main>
+    <section class="sheet" id="welcome">
+      <span class="label">Небольшой тест · Большой шаг</span>
+
+      <div class="hero">
+        <div>
+          <h1>Время подружиться<br>с <em>JavaScript.</em></h1>
+          <p class="description">
+            Проверь знания, открой для себя новое и собери
+            свою коллекцию правильных ответов.
+            Здесь можно учиться в собственном темпе.
+          </p>
+        </div>
+        <div class="sticker" aria-hidden="true">
+          <strong>{ }</strong>
+          немного кода и практики
+        </div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric"><strong>20</strong><span>вопросов по JS</span></div>
+        <div class="metric"><strong>10</strong><span>баллов за ответ</span></div>
+        <div class="metric"><strong>Без спешки</strong><span>таймер отсутствует</span></div>
+      </div>
+
+      <button class="primary" id="start">Начать тест →</button>
+      <p class="note">
+        Один вопрос — один правильный ответ.
+        После выбора появится объяснение.
+        Рекорд сохраняется в этом браузере при доступном локальном хранилище.
+      </p>
+    </section>
+
+    <section class="sheet" id="quiz" hidden aria-label="Вопросы теста">
+      <div class="topline">
+        <span id="counter"></span>
+        <span class="points"><span id="points">0</span> баллов</span>
+      </div>
+
+      <div class="progress" id="progress" role="progressbar"
+           aria-label="Отвечено вопросов" aria-valuemin="0"
+           aria-valuemax="20" aria-valuenow="0">
+        <div id="bar"></div>
+      </div>
+
+      <div class="question-meta">
+        <span class="topic" id="topic"></span>
+        <span class="note" id="streak">Серия: 0</span>
+      </div>
+
+      <h2 id="question" tabindex="-1"></h2>
+      <div class="answers" id="answers" role="group"
+           aria-labelledby="question"></div>
+
+      <div class="feedback" id="feedback" role="status"
+           aria-live="polite" aria-atomic="true"></div>
+
+      <div class="bottomline">
+        <span class="note">Ошибаться — часть обучения 🌿</span>
+        <button class="primary" id="next" disabled>Следующий вопрос →</button>
+      </div>
+    </section>
+
+    <section class="sheet" id="results" hidden>
+      <div class="result-head">
+        <span class="label">Твой результат</span>
+        <h2 id="result-title" tabindex="-1"></h2>
+        <p class="description" id="result-message"></p>
+        <div class="result-number" id="total"></div>
+        <span class="note">из 200 возможных баллов</span>
+        <p class="note" id="record-message"></p>
+      </div>
+
+      <div class="metrics">
+        <div class="metric"><strong id="right-count"></strong><span>верных ответов</span></div>
+        <div class="metric"><strong id="accuracy"></strong><span>точность</span></div>
+        <div class="metric"><strong id="best-streak"></strong><span>лучшая серия</span></div>
+      </div>
+
+      <div class="result-actions">
+        <button class="primary" id="restart">Пройти ещё раз ↻</button>
+      </div>
+
+      <details id="review-details">
+        <summary>Посмотреть разбор ответов</summary>
+        <div id="review"></div>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    Сделала <strong>Джураева Нигина, 11А класс</strong><br>
+    JavaScript Notes · Знания растут с практикой
+  </footer>
+</div>
+
+<script>
+"use strict";
+
+// Формат: тема, вопрос, варианты, индекс правильного ответа, объяснение.
+// Индексы вариантов начинаются с 0.
+const questions = [
+  [
+    "Переменные",
+    "Как объявить переменную, значение которой можно менять?",
+    ["let count = 1;", "const count = 1;", "fixed count = 1;", "value count = 1;"],
+    0,
+    "let позволяет повторно присваивать значение переменной."
+  ],
+  [
+    "Типы данных",
+    "Какой тип данных у значения true?",
+    ["string", "number", "boolean", "object"],
+    2,
+    "true и false — значения логического типа boolean."
+  ],
+  [
+    "Сравнение",
+    'Что вернёт 10 === "10"?',
+    ["true", "false", "10", "undefined"],
+    1,
+    "Строгое равенство === не приводит типы. Число и строка не равны."
+  ],
+  [
+    "Массивы",
+    "Как получить первый элемент массива colors?",
+    ["colors[1]", "colors.first()", "colors[-1]", "colors[0]"],
+    3,
+    "Индексация массивов в JavaScript начинается с нуля."
+  ],
+  [
+    "Строки",
+    'Какой результат у "Hello".length?',
+    ["4", "6", "5", "undefined"],
+    2,
+    "В строке Hello пять символов. Свойство length для этой строки равно 5."
+  ],
+  [
+    "Функции",
+    "Какое ключевое слово возвращает значение из функции?",
+    ["return", "break", "result", "send"],
+    0,
+    "return завершает выполнение функции и задаёт возвращаемое значение."
+  ],
+  [
+    "Массивы",
+    "Какой метод удаляет последний элемент массива?",
+    ["push()", "shift()", "unshift()", "pop()"],
+    3,
+    "pop() удаляет последний элемент массива и возвращает его."
+  ],
+  [
+    "Условия",
+    "Как записать условие «если age не меньше 18»?",
+    ["if age => 18", "if (age >= 18)", "if (age =< 18)", "when (age > 18)"],
+    1,
+    "Оператор >= означает «больше или равно», а условие if записывается в круглых скобках."
+  ],
+  [
+    "Циклы",
+    "Сколько раз выполнится тело цикла?\n\nfor (let i = 0; i < 3; i++) { ... }",
+    ["2", "4", "3", "Бесконечно"],
+    2,
+    "Тело цикла выполнится при i, равном 0, 1 и 2. При i = 3 условие станет ложным."
+  ],
+  [
+    "Объекты",
+    'Как получить свойство name объекта student?',
+    ["student.name", "student->name", 'student("name")', "student::name"],
+    0,
+    "Для доступа к свойству подходит student.name или student[\"name\"]."
+  ],
+  [
+    "DOM",
+    'Что делает document.getElementById("title")?',
+    ["Удаляет заголовок", "Находит элемент по id", "Создаёт новый id", "Меняет текст страницы"],
+    1,
+    "Метод возвращает элемент с указанным id или null, если такого элемента нет."
+  ],
+  [
+    "События",
+    "Какое событие соответствует обычному нажатию на кнопку?",
+    ["hover", "submit", "change", "click"],
+    3,
+    "Событие click используется для обработки нажатия на элемент, в том числе его активации с клавиатуры."
+  ],
+  [
+    "Преобразование типов",
+    'Что вернёт Number("25")?',
+    ['Строку "25"', "NaN", "Число 25", "true"],
+    2,
+    "Number() преобразует эту строку в числовое значение 25."
+  ],
+  [
+    "Шаблонные строки",
+    "Какие символы окружают шаблонную строку с ${expression}?",
+    ["Обратные кавычки ` `", "Одинарные кавычки ' '", 'Двойные кавычки " "', "Круглые скобки ( )"],
+    0,
+    "Шаблонные строки заключаются в обратные кавычки и поддерживают вставку выражений через ${...}."
+  ],
+  [
+    "Массивы",
+    "Что вернёт [2, 4, 6].map(n => n / 2)?",
+    ["[2, 4, 6]", "[1, 2, 3]", "12", "[true, true, true]"],
+    1,
+    "map() создаёт новый массив результатов. Каждый элемент здесь делится на 2."
+  ],
+  [
+    "JSON",
+    "Как преобразовать объект в JSON-строку?",
+    ["JSON.parse()", "JSON.toObject()", "JSON.read()", "JSON.stringify()"],
+    3,
+    "JSON.stringify() преобразует сериализуемое значение в JSON-строку."
+  ],
+  [
+    "Область видимости",
+    "Какая область видимости у переменной let?",
+    ["Всегда глобальная", "Только в одной строке", "Блочная", "Только внутри объекта"],
+    2,
+    "let имеет блочную область видимости: переменная доступна внутри блока, в котором объявлена, и вложенных областей."
+  ],
+  [
+    "Логические значения",
+    "Какое значение преобразуется в false?",
+    ["0", '"false"', "[]", "{}"],
+    0,
+    "Число 0 является falsy. Непустые строки, массивы и обычные объекты преобразуются в true."
+  ],
+  [
+    "Асинхронность",
+    "Что всегда возвращает вызов async-функции?",
+    ["Массив", "Promise", "Строку", "null"],
+    1,
+    "Вызов async-функции возвращает Promise. Обычное возвращаемое значение становится результатом его выполнения."
+  ],
+  [
+    "Константы",
+    "Можно ли добавить элемент в массив, объявленный через const?",
+    ["Нет, массив полностью заморожен", "Только если массив пустой", "Только через let", "Да, например методом push()"],
+    3,
+    "const запрещает повторное присваивание переменной, но не запрещает менять содержимое массива."
+  ]
+];
+
+const $ = id => document.getElementById(id);
+const storageKey = "nigina-js-notes-record";
+
+let best = 0;
+try {
+  const stored = Number(localStorage.getItem(storageKey));
+  if (Number.isInteger(stored) && stored >= 0 && stored <= 200) {
+    best = stored;
+  }
+} catch {
+  // При недоступном хранилище тест продолжает работать.
+}
+$("best").textContent = best;
+
+let list = [];
+let index = 0;
+let points = 0;
+let streak = 0;
+let bestStreak = 0;
+let locked = false;
+let history = [];
+
+function showScreen(id) {
+  ["welcome", "quiz", "results"].forEach(name => {
+    $(name).hidden = name !== id;
+  });
+}
+
+function shuffle(items) {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+function progress(count) {
+  $("bar").style.width = `${count / questions.length * 100}%`;
+  $("progress").setAttribute("aria-valuenow", String(count));
+}
+
+function start() {
+  list = shuffle(questions);
+  index = 0;
+  points = 0;
+  streak = 0;
+  bestStreak = 0;
+  history = [];
+  showScreen("quiz");
+  renderQuestion();
+}
+
+function renderQuestion() {
+  locked = false;
+  const [topic, text, answers] = list[index];
+
+  $("counter").textContent = `Вопрос ${index + 1} / ${list.length}`;
+  $("points").textContent = points;
+  $("topic").textContent = topic;
+  $("streak").textContent = `Серия: ${streak}`;
+  $("question").textContent = text;
+  $("answers").replaceChildren();
+  $("feedback").replaceChildren();
+  $("feedback").style.display = "none";
+  $("next").disabled = true;
+  $("next").textContent = index === list.length - 1
+    ? "Посмотреть результат →"
+    : "Следующий вопрос →";
+
+  progress(index);
+
+  answers.forEach((answer, answerIndex) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "answer";
+
+    const letter = document.createElement("span");
+    letter.className = "letter";
+    letter.textContent = String.fromCharCode(65 + answerIndex);
+    letter.setAttribute("aria-hidden", "true");
+
+    const text = document.createElement("span");
+    text.className = "answer-text";
+    text.textContent = answer;
+
+    button.append(letter, text);
+    button.addEventListener("click", () => choose(answerIndex));
+    $("answers").append(button);
+  });
+
+  $("question").focus();
+}
+
+function choose(selected) {
+  if (locked) return;
+  locked = true;
+
+  const question = list[index];
+  const correctIndex = question[3];
+  const isCorrect = selected === correctIndex;
+
+  if (isCorrect) {
+    points += 10;
+    streak++;
+    bestStreak = Math.max(bestStreak, streak);
+  } else {
+    streak = 0;
+  }
+
+  history.push({ question, selected, isCorrect });
+
+  [...$("answers").children].forEach((button, i) => {
+    button.disabled = true;
+
+    if (i === correctIndex) {
+      button.classList.add("correct");
+      button.querySelector(".letter").textContent = "✓";
+      button.setAttribute("aria-label", `${question[2][i]}. Правильный ответ`);
+    } else if (i === selected) {
+      button.classList.add("wrong");
+      button.querySelector(".letter").textContent = "✕";
+      button.setAttribute("aria-label", `${question[2][i]}. Неправильный ответ`);
+    }
+  });
+
+  const heading = document.createElement("strong");
+  heading.textContent = isCorrect
+    ? "✓ Всё верно! +10 баллов"
+    : "✕ Пока неверно — разберёмся";
+  heading.style.color = isCorrect ? "var(--green)" : "var(--red)";
+
+  const explanation = document.createElement("p");
+  explanation.textContent = question[4];
+
+  $("feedback").style.display = "block";
+  $("feedback").replaceChildren(heading, explanation);
+  $("points").textContent = points;
+  $("streak").textContent = `Серия: ${streak}${streak >= 3 ? " ✨" : ""}`;
+  progress(index + 1);
+
+  $("next").disabled = false;
+  $("next").focus();
+}
+
+function finish() {
+  showScreen("results");
+
+  const right = history.filter(item => item.isCorrect).length;
+  const accuracy = Math.round(right / questions.length * 100);
+  const newRecord = points > best;
+
+  if (newRecord) {
+    best = points;
+    try {
+      localStorage.setItem(storageKey, String(best));
+    } catch {
+      // Рекорд останется в памяти до перезагрузки.
+    }
+  }
+
+  $("best").textContent = best;
+  $("total").textContent = points;
+  $("right-count").textContent = `${right} / ${questions.length}`;
+  $("accuracy").textContent = `${accuracy}%`;
+  $("best-streak").textContent = bestStreak;
+  $("record-message").textContent = newRecord
+    ? "✨ Поздравляем! Это твой новый рекорд."
+    : `Личный рекорд: ${best} из 200 баллов.`;
+
+  let title;
+  let message;
+
+  if (accuracy === 100) {
+    title = "Идеальный результат 🌟";
+    message = "Все 20 ответов верные. Ты отлично справилась или справился!";
+  } else if (accuracy >= 75) {
+    title = "Отличная работа 🌿";
+    message = "У тебя уверенные знания. Разбор ответов поможет закрепить сложные темы.";
+  } else if (accuracy >= 50) {
+    title = "Хорошее начало ☀️";
+    message = "Основа уже есть. Немного практики — и результат станет ещё лучше.";
+  } else {
+    title = "Первый шаг сделан 🌱";
+    message = "Теперь ты знаешь, какие темы повторить. Прочитай объяснения и попробуй снова.";
+  }
+
+  $("result-title").textContent = title;
+  $("result-message").textContent = message;
+  $("review-details").open = false;
+  $("review").replaceChildren();
+
+  history.forEach((item, i) => {
+    const [, text, answers, correct, explanation] = item.question;
+
+    const article = document.createElement("article");
+    article.className = "review-item";
+
+    const heading = document.createElement("strong");
+    heading.textContent = `${item.isCorrect ? "✓" : "✕"} ${i + 1}. ${text}`;
+
+    const selected = document.createElement("p");
+    selected.className = item.isCorrect ? "right" : "wrong-text";
+    selected.textContent = `Твой ответ: ${answers[item.selected]}`;
+
+    article.append(heading, selected);
+
+    if (!item.isCorrect) {
+      const answer = document.createElement("p");
+      answer.className = "right";
+      answer.textContent = `Правильный ответ: ${answers[correct]}`;
+      article.append(answer);
+    }
+
+    const info = document.createElement("p");
+    info.textContent = explanation;
+    article.append(info);
+
+    $("review").append(article);
+  });
+
+  $("result-title").focus();
+}
+
+$("start").addEventListener("click", start);
+$("restart").addEventListener("click", start);
+
+$("next").addEventListener("click", () => {
+  if (!locked) return;
+
+  if (index === list.length - 1) {
+    finish();
+  } else {
+    index++;
+    renderQuestion();
+  }
+});
+</script>
+</body>
+</html>
